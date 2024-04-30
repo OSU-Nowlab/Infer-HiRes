@@ -1,6 +1,7 @@
 __pycache__
-src/infer-hires.egg-info/
 build/
 dist/
+src/infer_hires.egg-info/
+examples/logs/
 
 

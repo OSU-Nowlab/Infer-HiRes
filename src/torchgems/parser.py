@@ -193,7 +193,6 @@ def get_parser():
     parser.add_argument(
         "--checkpoint",
         type=str,
-        default="./checkpoint.pth",
         help="Checkpoint path",
     )
 

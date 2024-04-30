@@ -5,9 +5,9 @@ This project facilitates inference with quantization for high-resolution images,
 <div align="center">
  <img src="docs/assets/images/QuantizationDesign.png" width="600px">
  <br>
- <figcaption>
- <strong>Quantization in Deep Learning<strong>
-</figcaption>
+        <figcaption>
+                <strong>Quantization in Deep Learning</strong>
+        </figcaption>
 <br>
 </div>
 <br>
@@ -36,12 +36,12 @@ python setup.py install
 
 ### Single-GPU Evaluation
 <div align="center">
- <img src="docs/assets/images/Single_GPU_Eval.png" width="600px">
+ <img src="docs/assets/images/Single_GPU_Eval.png" width="650px">
  <br>
- <figcaption>
-        <strong>Figure 1. Throughput and Memory Evaluation on a single GPU for the ResNet101 model with different image sizes and batch
+<figcaption>
+        <sup>Figure 1. Throughput and Memory Evaluation on a single GPU for the ResNet101 model with different image sizes and batch
         size 32. The speedup and memory reduction is shown in respective colored boxes for FP16, BFLOAT16, and INT8 when compared
-        to baseline FP3. Overall, we acheived an average 6.5x speedup and 4.55x memory reduction with a single GPU using INT8 quantization.</strong>
+        to baseline FP3. Overall, we acheived an average 6.5x speedup and 4.55x memory reduction with a single GPU using INT8 quantization.</sup>
 
 </figcaption>
 
@@ -52,20 +52,20 @@ python setup.py install
 ### Spatial Parallelism Evaluation
 
 <div align="center">
- <img src="docs/assets/images/Enable_Acc_with_SP.png">
+ <img src="docs/assets/images/Enable_Accelerate_with_SP.png" width="650px">
  <br>
- <figcaption>
-        <strong>Figure 3. Enabling scaled images and accelerating performance using SP</strong>
+<figcaption>
+        <sup>Figure 2. Enabling scaled images and accelerating performance using SP</sup>
  </figcaption>
 <br>
 </div>
 <br>
 
 <div align="center">
-  <img src="docs/assets/images/SP_Eval.png" alt="Throughput and Memory Evaluation for SP with Quantization" width="600px">
+  <img src="docs/assets/images/SP_Eval.png" alt="Throughput and Memory Evaluation for SP with Quantization" width="650px">
   <br>
-  <figcaption>
-        <strong>Figure 2. Throughput and Memory Evaluation using SP+LP for ResNet101 model with image sizes of 4096x4096. The evaluation is done by comparing quantized model of FP16, BFLOAT16 quantization with FP32 as the baseline.By utilizing Distributed DL, we enabled inference for scaled images, achieving an average 1.58x speedup and 1.57x memory reduction using half-precision. </strong>
+<figcaption>
+        <sup>Figure 3. Throughput and Memory Evaluation using SP+LP for ResNet101 model with image sizes of 4096x4096. The evaluation is done by comparing quantized model of FP16, BFLOAT16 quantization with FP32 as the baseline.By utilizing Distributed DL, we enabled inference for scaled images, achieving an average 1.58x speedup and 1.57x memory reduction using half-precision. </sup>
   </figcaption>
 <br>
 </div>
@@ -109,6 +109,7 @@ mpirun_rsh --export-all -np $total_np\
 Refer [Spatial Parallelism](benchmarks/spatial_parallelism), [Layer Parallelism](benchmarks/layer_parallelism) and [with Single GPU]() for more benchmarks.
 
 ## References
-1. Arpan Jain, Ammar Ahmad Awan, Asmaa M. Aljuhani, Jahanzeb Maqbool Hashmi, Quentin G. Anthony, Hari Subramoni, Dhableswar K. Panda, Raghu Machiraju, and Anil Parwani. 2020. GEMS: <u>G</u>PU-<u>e</u>nabled <u>m</u>emory-aware model-parallelism <u>s</u>ystem for distributed DNN training. In Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis (SC '20). IEEE Press, Article 45, 1–15. https://doi.org/10.1109/SC41405.2020.00049
-2. Arpan Jain, Aamir Shafi, Quentin Anthony, Pouya Kousha, Hari Subramoni, and Dhableswar K. Panda. 2022. Hy-Fi: Hybrid Five-Dimensional Parallel DNN Training on High-Performance GPU Clusters. In High Performance Computing: 37th International Conference, ISC High Performance 2022, Hamburg, Germany, May 29 – June 2, 2022, Proceedings. Springer-Verlag, Berlin, Heidelberg, 109–130. https://doi.org/10.1007/978-3-031-07312-0_6
+1. MPI4DL : https://github.com/OSU-Nowlab/MPI4DL
+2. Arpan Jain, Ammar Ahmad Awan, Asmaa M. Aljuhani, Jahanzeb Maqbool Hashmi, Quentin G. Anthony, Hari Subramoni, Dhableswar K. Panda, Raghu Machiraju, and Anil Parwani. 2020. GEMS: <u>G</u>PU-<u>e</u>nabled <u>m</u>emory-aware model-parallelism <u>s</u>ystem for distributed DNN training. In Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis (SC '20). IEEE Press, Article 45, 1–15. https://doi.org/10.1109/SC41405.2020.00049
+3. Arpan Jain, Aamir Shafi, Quentin Anthony, Pouya Kousha, Hari Subramoni, and Dhableswar K. Panda. 2022. Hy-Fi: Hybrid Five-Dimensional Parallel DNN Training on High-Performance GPU Clusters. In High Performance Computing: 37th International Conference, ISC High Performance 2022, Hamburg, Germany, May 29 – June 2, 2022, Proceedings. Springer-Verlag, Berlin, Heidelberg, 109–130. https://doi.org/10.1007/978-3-031-07312-0_6
 

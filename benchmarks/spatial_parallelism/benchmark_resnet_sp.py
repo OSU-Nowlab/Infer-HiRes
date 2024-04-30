@@ -149,7 +149,10 @@ comm_size = mpi_comm.size
 local_rank = rank
 split_rank = mpi_comm.split_rank
 
-CHECKPOINT = os.path.join(CHECKPOINT_DIR_PATH, f"InferHiRes_{local_rank}.pth")
+if CHECKPOINT_DIR_PATH is not None:
+    CHECKPOINT = os.path.join(CHECKPOINT_DIR_PATH, f"InferHiRes_{local_rank}.pth")
+else:
+    CHECKPOINT = None
 
 if balance != None:
     balance = balance.split(",")

@@ -104,9 +104,10 @@ def load_dataset(app, batch_size, image_size):
     if app == 1:
         return load_custom_dataset(batch_size, image_size)
     if app == 2:
-        return load_fake_dataset(batch_size, image_size)
-    if app == 3:
         return load_cifar10Test(batch_size)
+    if app == 3:
+        return load_fake_dataset(batch_size, image_size)
+
 
 
 def int8_quantization_with_tensorRT(
