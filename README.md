@@ -1,11 +1,12 @@
 ## Inference with quantization for High-Resolution Images
 
-This project facilitates inference with quantization for high-resolution images, offering support for integer-only (INT8) and half-precision (FLOAT16/BFLOAT16) for single-GPU inference. Furthermore, for scaled images (e.g., beyond 2048×2048 or 4096×4096), we leverage Spatial Parallelism (referenced as a parallelism technique for Distributed Deep Learning) with support for half-precision quantization. We evaluate inference with quantization on different datasets, including real-world pathology dataset: [CAMELYON16](https://camelyon16.grand-challenge.org/), and object detection datasets:[ImageNet](https://www.image-net.org/),[Cifar10](https://www.cs.toronto.edu/~kriz/cifar.html), achieving accuracy degradation of less than 1%.
+This project facilitates inference with quantization for high-resolution images, offering support for integer-only (INT8) and half-precision (FLOAT16/BFLOAT16) for single-GPU inference. Furthermore, for scaled images (e.g., beyond 2048×2048 or 4096×4096), we leverage Spatial Parallelism (referenced as a parallelism technique for Distributed Deep Learning) with support for half-precision quantization. We evaluate inference with quantization on different datasets, including real-world pathology dataset: [CAMELYON16](https://camelyon16.grand-challenge.org/), and object detection datasets: [ImageNet](https://www.image-net.org/), [Cifar10](https://www.cs.toronto.edu/~kriz/cifar.html), [Imagenette](https://github.com/fastai/imagenette), achieving accuracy degradation of less than 1%.
 
 <div align="center">
  <img src="docs/assets/images/QuantizationDesign.png" width="600px">
  <br>
- <figcaption>Quantization in Deep Learning
+ <figcaption>
+ <strong>Quantization in Deep Learning<strong>
 </figcaption>
 <br>
 </div>
@@ -18,7 +19,8 @@ This project facilitates inference with quantization for high-resolution images,
 - Python 3.8 or later (for Linux, Python 3.8.1+ is needed).
 - [NCCL](https://developer.nvidia.com/nccl)
 - [PyTorch](https://pytorch.org/) >=  1.13.1 </br>
-- [Tensor-Rt](https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html) (if you are using INT8 quntization) Installation instructions : https://pytorch.org/TensorRT/getting_started/installation.html
+- [TensorRt](https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html) (required only for INT8 quantization)
+<!-- <br>Follow instructions for installation : https://pytorch.org/TensorRT/getting_started/installation.html -->
 
 *Note:
 We used the following versions during implementation and testing.
@@ -36,9 +38,11 @@ python setup.py install
 <div align="center">
  <img src="docs/assets/images/Single_GPU_Eval.png" width="600px">
  <br>
- <figcaption>Figure 1. Throughput and Memory Evaluation on a single GPU for the ResNet101 model with different image sizes and batch
-size 32. The speedup and memory reduction is shown in respective colored boxes for FP16, BFLOAT16, and INT8 when compared
-to baseline FP3
+ <figcaption>
+        <strong>Figure 1. Throughput and Memory Evaluation on a single GPU for the ResNet101 model with different image sizes and batch
+        size 32. The speedup and memory reduction is shown in respective colored boxes for FP16, BFLOAT16, and INT8 when compared
+        to baseline FP3. Overall, we acheived an average 6.5x speedup and 4.55x memory reduction with a single GPU using INT8 quantization.</strong>
+
 </figcaption>
 
 <br>
@@ -48,24 +52,24 @@ to baseline FP3
 ### Spatial Parallelism Evaluation
 
 <div align="center">
-  <img src="abc.png" alt="Throughput and Memory Evaluation for SP with Quantization" width="600px">
+ <img src="docs/assets/images/Enable_Acc_with_SP.png">
+ <br>
+ <figcaption>
+        <strong>Figure 3. Enabling scaled images and accelerating performance using SP</strong>
+ </figcaption>
+<br>
+</div>
+<br>
+
+<div align="center">
+  <img src="docs/assets/images/SP_Eval.png" alt="Throughput and Memory Evaluation for SP with Quantization" width="600px">
   <br>
-  <figcaption>Figure 1. Throughput and Memory Evaluation using SP+LP for ResNet101 model with image sizes of 4096x4096. The evaluation is done by comparing quantized model of FP16, BFLOAT16 quantization with FP32 as the baseline.
+  <figcaption>
+        <strong>Figure 2. Throughput and Memory Evaluation using SP+LP for ResNet101 model with image sizes of 4096x4096. The evaluation is done by comparing quantized model of FP16, BFLOAT16 quantization with FP32 as the baseline.By utilizing Distributed DL, we enabled inference for scaled images, achieving an average 1.58x speedup and 1.57x memory reduction using half-precision. </strong>
   </figcaption>
 <br>
 </div>
 <br>
-
-
-<div align="center">
- <img src="docs/assets/images/enable_acc_withSP.png">
- <br>
- <figcaption>Enabling scaled images and accelerating performance using SP</figcaption>
-<br>
-</div>
-<br>
-
-
 
 ## Run Inference
 
@@ -87,14 +91,8 @@ Example to run ResNet model with model partition set to two, spatial partition s
 Example to run ResNet model with model partition set to two, spatial partition set to four, with half-precision quantization.
 
 ```bash
-$MV2_HOME/bin/mpirun_rsh --export-all -np $total_np\
-        --hostfile ${hostfile}  \
-        MV2_USE_CUDA=1 \
-        MV2_HYBRID_BINDING_POLICY=spread \
-        MV2_CPU_BINDING_POLICY=hybrid \
-        MV2_USE_GDRCOPY=0 \
-        PYTHONNOUSERSITE=true \
-        LD_PRELOAD=$MV2_HOME/lib/libmpi.so \
+mpirun_rsh --export-all -np $total_np\
+        --hostfile ${hostfile} \
         python benchmarks/spatial_parallelism/benchmark_resnet_sp.py \
         --batch-size ${batch_size} \
         --split-size 2 \
