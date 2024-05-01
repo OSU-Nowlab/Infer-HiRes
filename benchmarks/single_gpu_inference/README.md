@@ -14,8 +14,6 @@ python single_gpu_inference/benchmark_resnet_inference.py \
 ```
 #### Examples
 
-- With 4 GPUs [split size: 4]
-
 Example to run ResNet for 1024 * 1024 image size woth INT8 quantization.
 
 ```bash
