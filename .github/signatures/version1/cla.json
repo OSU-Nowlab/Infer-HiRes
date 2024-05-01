@@ -1,3 +1,12 @@
 {
-   "signedContributors": []
+  "signedContributors": [
+    {
+      "name": "RadhaGulhane13",
+      "id": 68048778,
+      "comment_id": 2089254892,
+      "created_at": "2024-05-01T22:51:07Z",
+      "repoId": 725793989,
+      "pullRequestNo": 3
+    }
+  ]
 }
