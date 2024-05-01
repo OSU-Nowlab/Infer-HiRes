@@ -109,7 +109,6 @@ def load_dataset(app, batch_size, image_size):
         return load_fake_dataset(batch_size, image_size)
 
 
-
 def int8_quantization_with_tensorRT(
     model, device, batch_size, image_size, num_classes, precision
 ):
