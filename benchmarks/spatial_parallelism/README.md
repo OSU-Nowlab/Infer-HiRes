@@ -1,12 +1,30 @@
-# Spatial Parallelism Benchmarks
+# Run Spatial Parallelism Inference
 
 Model benchmarks for inference with spatial parallelism also require performing model parallelism. To configure the number of model partitions and the number of model partitions that will use spatial parallelism, you can use the --split-size and --spatial-size arguments respectively.
 
-## Run spatial parallelism:
 
 #### Generic command:
 ```bash
-$MV2_HOME/bin/mpirun_rsh --export-all -np $np --hostfile  {$HOSTFILE} MV2_USE_CUDA=1 MV2_HYBRID_BINDING_POLICY=spread MV2_CPU_BINDING_POLICY=hybrid MV2_USE_GDRCOPY=0 PYTHONNOUSERSITE=true LD_PRELOAD=$MV2_HOME/lib/libmpi.so python ${sp_model_script} --halo-D2 --num-spatial-parts ${num_spatial_parts}  --image-size ${image_size} --batch-size ${batch_size} --slice-method ${partition} --backend ${backend} --precision ${precision} --enable-evaluation
+mpirun_rsh --export-all -np $total_np\
+        --hostfile ${hostfile}  \
+        MV2_USE_CUDA=1 \
+        MV2_HYBRID_BINDING_POLICY=spread \
+        MV2_CPU_BINDING_POLICY=hybrid \
+        MV2_USE_GDRCOPY=0 \
+        PYTHONNOUSERSITE=true \
+        LD_PRELOAD=$MV2_HOME/lib/libmpi.so \
+        python spatial_parallelism/benchmark_resnet_sp.py \
+        --batch-size ${batch_size} \
+        --parts ${parts} \
+        --split-size ${split_size} \
+        --slice-method ${slice_method} \
+        --num-spatial-parts ${num_spatial_parts} \
+        --image-size ${image_size} \
+        --backend ${backend} \
+        --precision ${precision} \
+        --checkpoint ${checkpoint_path} \
+        --datapath ${datapath} \
+        --enable-evaluation
 
 ```
 #### Examples
@@ -15,19 +33,46 @@ $MV2_HOME/bin/mpirun_rsh --export-all -np $np --hostfile  {$HOSTFILE} MV2_USE_CU
 
 Example to run ResNet model with 2 model split size(i.e. # of partitions for MP), spatial partition (# of image partitions) as 4 and 1 as spatial size (i.e. number of model partition which will use spatial partition), fp_16 as quantization. In this configuration, we split model into two parts where first part will use spatial parallelism.
 
-Find the example to run ResNet :
 ```bash
-$MV2_HOME/bin/mpirun_rsh --export-all -np 5 --hostfile {$HOSTFILE} MV2_USE_CUDA=1 MV2_HYBRID_BINDING_POLICY=spread MV2_CPU_BINDING_POLICY=hybrid MV2_USE_GDRCOPY=0 PYTHONNOUSERSITE=true LD_PRELOAD=$MV2_HOME/lib/libmpi.so benchmarks/spatial_parallelism/benchmark_resnet_sp.py --num-spatial-parts 4 --image-size 1024 --batch-size 2 --slice-method "square" --precision "fp_16" --backend "nccl"
+mpirun_rsh --export-all -np $total_np\
+        --hostfile ${hostfile}  \
+        MV2_USE_CUDA=1 \
+        MV2_HYBRID_BINDING_POLICY=spread \
+        MV2_CPU_BINDING_POLICY=hybrid \
+        MV2_USE_GDRCOPY=0 \
+        PYTHONNOUSERSITE=true \
+        LD_PRELOAD=$MV2_HOME/lib/libmpi.so \
+        python spatial_parallelism/benchmark_resnet_sp.py \
+        --num-spatial-parts 4 \
+        --image-size 1024 \
+        --batch-size 2 \
+        --slice-method "square" \
+        --precision "fp_16" \
+        --backend "nccl" \
+        --enable-evaluation
 ```
-- Similarly, we can run benchmark for AmoebaNet model .
-```bash
-$MV2_HOME/bin/mpirun_rsh --export-all -np 5 --hostfile {$HOSTFILE} MV2_USE_CUDA=1 MV2_HYBRID_BINDING_POLICY=spread MV2_CPU_BINDING_POLICY=hybrid MV2_USE_GDRCOPY=0 PYTHONNOUSERSITE=true LD_PRELOAD=$MV2_HOME/lib/libmpi.so python benchmarks/spatial_parallelism/benchmark_amoebanet_sp.py --image-size 512 --num-spatial-parts 4 --slice-method "vertical" --split-size 2 --spatial-size 1 --slice-method "square" --precision "fp_16" --backend "nccl"
-```
+
 - With 9 GPUs [split size: 3, num_spatial_parts: 4, spatial_size: 2]
 In this configuration, we split model int three parts where first two part will use spatial parallelism.
 
 ```bash
-$MV2_HOME/bin/mpirun_rsh --export-all -np 9 --hostfile {$HOSTFILE} MV2_USE_CUDA=1 MV2_HYBRID_BINDING_POLICY=spread MV2_CPU_BINDING_POLICY=hybrid MV2_USE_GDRCOPY=0 PYTHONNOUSERSITE=true LD_PRELOAD=$MV2_HOME/lib/libmpi.so python benchmarks/spatial_parallelism/benchmark_resnet_sp.py --image-size 512 --num-spatial-parts 4 --slice-method "vertical" --split-size 3 --spatial-size 2 --precision "fp_16" --backend "nccl"
+mpirun_rsh --export-all -np $total_np\
+        --hostfile ${hostfile}  \
+        MV2_USE_CUDA=1 \
+        MV2_HYBRID_BINDING_POLICY=spread \
+        MV2_CPU_BINDING_POLICY=hybrid \
+        MV2_USE_GDRCOPY=0 \
+        PYTHONNOUSERSITE=true \
+        LD_PRELOAD=$MV2_HOME/lib/libmpi.so \
+        python spatial_parallelism/benchmark_resnet_sp.py \
+        --image-size 512 \
+        --num-spatial-parts 4 \
+        --slice-method "vertical" \
+        --split-size 3 \
+        --spatial-size 2 \
+        --precision "fp_16" \
+        --backend "nccl" \
+        --enable-evaluation
 ```
 
 
@@ -57,12 +102,8 @@ optional arguments:
   --times TIMES         Number of times to repeat MASTER 1: 2 repications, 2: 4 replications (default: 1)
   --image-size IMAGE_SIZE
                         Image size for synthetic benchmark (default: 32)
-  --num-epochs NUM_EPOCHS
-                        Number of epochs (default: 1)
   --num-layers NUM_LAYERS
                         Number of layers in amoebanet (default: 18)
-  --num-filters NUM_FILTERS
-                        Number of layers in amoebanet (default: 416)
   --num-classes NUM_CLASSES
                         Number of classes (default: 10)
   --balance BALANCE     length of list equals to number of partitions and sum should be equal to num layers (default: None)

@@ -106,7 +106,7 @@ mpirun_rsh --export-all -np $total_np\
         --enable-evaluation &>> $OUTFILE 2>&1
 ```
 
-Refer [Spatial Parallelism](benchmarks/spatial_parallelism), [Layer Parallelism](benchmarks/layer_parallelism) and [with Single GPU]() for more benchmarks.
+Refer [Spatial Parallelism](benchmarks/spatial_parallelism), [Layer Parallelism](benchmarks/layer_parallelism) and [Single GPU](benchmarks/single_gpu_inference) for more benchmarks.
 
 ## References
 1. MPI4DL : https://github.com/OSU-Nowlab/MPI4DL
